@@ -3,7 +3,7 @@ import React from 'react'
 export default class HogData extends React.Component {
     render () {
         return (
-            <div className='hogDetails' >
+            <div className='description' >
                 <p>{this.props.hog.specialty}</p>
                 <p>Greased: {this.props.hog.greased ? "Greasy" : "Dry"}</p>
                 <p>Weight: {this.props.hog.weight}</p>

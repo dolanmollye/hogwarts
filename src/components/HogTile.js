@@ -1,10 +1,10 @@
 import React from 'react';
-import HogList from './HogList.js';
 import HogData from './HogData.js';
 
 class HogTile extends React.Component {
     state = {
-        selected: false
+        selected: false,
+        hidden: false
     }
 
     getImage = pigName => {
@@ -22,14 +22,29 @@ class HogTile extends React.Component {
         })
     }
 
+    handleHidePiggy = () => {
+        this.setState((prevState) => ({
+            hidden: !prevState.hidden
+        }))
+    }
+
     render() {
-        return (
-            <div className= 'pigTile' onClick= {this.handleClick}>
-                <h3>{this.props.hogData.name}</h3>
-                <img src={this.getImage(this.props.hogData.name)}/>
-                {this.state.selected == true ? <HogData hog = {this.props.hogData}/> : null}
+        if(this.state.hidden) {
+            return ( 
+            <div className= 'ui card pigTile' onClick= {this.handleClick}>
+                <button className='ui button' onClick={this.handleHidePiggy}>Reveal Piggy</button>
             </div>
-        )
+            )
+        }
+        else{
+            return (
+                <div className= 'ui card pigTile' onClick= {this.handleClick}>
+                    <h3 className='header'>{this.props.hogData.name}</h3>
+                    <img src={this.getImage(this.props.hogData.name)}/>
+                    <button className='ui button' onClick={this.handleHidePiggy}>Hide Piggy</button>
+                    {this.state.selected == true ? <HogData hog = {this.props.hogData}/> : null}
+                </div>
+        )}
     }
 }
 

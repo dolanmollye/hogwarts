@@ -3,68 +3,52 @@ import "../App.css";
 import Nav from "./Nav";
 import hogs from "../porkers_data";
 import HogList from "./HogList";
-import GreasedHogs from "./GreasedHogs.js";
+import FilterSelector from "./FilterSelector";
 
 class App extends Component {
   state = {
-    azClicked: false, 
-    weightClicked: false,
-    greasedClicked: false,
-    dryClicked: false
+    hogs: []
   }
 
-  handleSortByAZ = () => {
-    this.setState(prevState => {
-      return{
-        azClicked: !prevState.azClicked
-      }
+  componentDidMount(){
+    this.setState({
+      hogs: hogs
     })
   }
 
-  handleSortByWeight = () => {
-    this.setState(prevState => {
-      return{
-        weightClicked: !prevState.weightClicked
-      }
-    })
+  filterHogs = filter => {
+    switch (filter) {
+      case 'none': this.setState({
+        hogs: hogs
+      })  
+        break;
+      case 'greased': this.setState({
+        hogs: hogs.filter(hog => hog.greased === true)
+      })       
+        break;
+      case 'name': this.setState({
+        hogs: hogs.sort((a,b) => (a.name > b.name) ? 1 : -1)
+      })       
+        break;  
+      case 'weight': this.setState({
+        hogs: hogs.sort((a,b) => (a.weight > b.weight)? 1 : -1 )
+      })       
+        break; 
+      default:
+        break;
+    }
   }
 
-  handleFilterGreased = () => {
-    this.setState(prevState => {
-      return{
-        greasedClicked: !prevState.greasedClicked
-      }
-    })
-    console.log(this.state)
-  }
-
-  handleFilterDry = () => {
-    this.setState(prevState => {
-      return{
-        dryClicked: !prevState.dryClicked
-      }
-    })
+  fetchHogGifs = () => {
+    
   }
 
   render() {
     return (
       <div className="App">
         <Nav />
-        <div className='btn-div'>
-            <button className='a-z' onClick= {this.handleSortByAZ}>
-              Pigs A-Z  
-            </button>
-            <button className='weight' onClick= {this.handleSortByWeight}>
-              Weight 
-            </button>
-            <button className='greased' onClick= {this.handleFilterGreased}>
-              Greased
-            </button>
-            <button className='dry' onClick= {this.handleFilterDry}>
-              Dry 
-            </button>
-        </div>
-        {!this.state.greasedClicked ? <HogList /> : <GreasedHogs />}
+        <FilterSelector filterSelected={this.filterHogs}/>
+        <HogList hogs={this.state.hogs}/>
       </div>
     );
   }
